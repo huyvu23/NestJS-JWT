@@ -4,15 +4,17 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy } from 'passport-local';
 import { AuthService } from '../auth.service';
 import { Injectable, UnauthorizedException } from '@nestjs/common';
-
+// (local) Tên này được sử dụng để xác định chiến lược khi bạn cấu hình
 @Injectable()
-export class LocalStrategy extends PassportStrategy(Strategy) {
+export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
   constructor(private authService: AuthService) {
     super();
   }
 
-  validateUser(userName: string, password: string) {
-    const user = this.authService.validateUser({ userName, password });
+  validate(username: string, password: string) {
+    console.log('run local two');
+
+    const user = this.authService.validateUser({ username, password });
     if (!user) throw new UnauthorizedException();
     return user;
   }
